@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludovico Pigatto | Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#edd575',
+                            500: '#d4af37',
+                            600: '#aa8c2c',
+                        },
+                        dark: {
+                            900: '#050505',
+                            800: '#0a0a0a',
+                        },
+                        'neon-blue': '#4a90e2',
+                        'teal-400': '#2dd4bf',
+                        'aviation-dark': '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            overflow-x: hidden;
+            position: relative;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-liquid {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .btn-liquid:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            color: #000;
+            border: none;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            transform: scale(1.02);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === VIEW DETTAGLIO (COMUNE) === */
+        .detail-view {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            overflow-y: auto;
+            color: #e2e8f0;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(212,175,55,0.16) 0, transparent 55%),
+                radial-gradient(circle at 85% 100%, rgba(45,212,191,0.12) 0, transparent 55%),
+                #050505;
+        }
+
+        .detail-view.active {
+            transform: translateX(0);
+        }
+
+        .detail-section-card {
+            background: rgba(10, 10, 10, 0.96);
+            backdrop-filter: blur(18px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-link {
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #edd575;
+            border-bottom: 1px dashed rgba(237, 213, 117, 0.7);
+            transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+        }
+        .highlight-link:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+            background-color: rgba(212, 175, 55, 0.12);
+        }
+
+        .aviation-slide {
+            transition: opacity 0.4s ease;
+        }
+        .aviation-slide.hidden {
+            opacity: 0;
+        }
+        .aviation-slide.active {
+            opacity: 1;
+        }
+
+        .flight-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.55), transparent 60%);
+        }
+
+        .flight-plane {
+            position: relative;
+            font-size: 3.5rem;
+            color: #d4af37;
+            text-shadow:
+                0 0 18px rgba(212, 175, 55, 0.9),
+                0 0 40px rgba(0, 0, 0, 1);
+            opacity: 0;
+        }
+
+        .flight-plane::after {
+            content: "";
+            position: absolute;
+            left: -190px;
+            top: 55%;
+            transform: translateY(-50%);
+            width: 210px;
+            height: 44px;
+            border-radius: 999px;
+            background: radial-gradient(ellipse at left,
+                rgba(148, 163, 184, 0.9),
+                rgba(148, 163, 184, 0.0) 70%);
+            filter: blur(7px);
+            opacity: 0.5;
+        }
+
+        .flight-plane.animate {
+            animation: plane-takeoff 0.9s ease-out forwards;
+        }
+
+        @keyframes plane-takeoff {
+            0% {
+                transform: translateX(-45vw) translateY(18vh) scale(0.85) rotate(-12deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            55% {
+                transform: translateX(5vw) translateY(-2vh) scale(1) rotate(-6deg);
+            }
+            100% {
+                transform: translateX(55vw) translateY(-26vh) scale(1.08) rotate(-3deg);
+                opacity: 0;
+            }
+        }
+
+        /* === CAROSELLO PROGETTI 3D HOME === */
+
+        .projects-carousel-container {
+            width: 100%;
+            max-width: 1100px;
+            height: 420px;
+            position: relative;
+            perspective: 1000px;
+            margin: 0 auto;
+            margin-top: 1.5rem;
+        }
+
+        .projects-carousel-track {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .project-card {
+            position: absolute;
+            width: 260px;
+            height: 360px;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: grayscale(40%);
+        }
+
+        .project-card.center {
+            z-index: 10;
+            transform: scale(1.08) translateZ(0);
+        }
+
+        .project-card.center img {
+            filter: grayscale(0%);
+        }
+
+        .project-card.left-2 {
+            z-index: 1;
+            transform: translateX(-380px) scale(0.8) translateZ(-260px);
+            opacity: 0.5;
+        }
+
+        .project-card.left-2 img {
+            filter: grayscale(100%);
+        }
+
+        .project-card.left-1 {
+            z-index: 5;
+            transform: translateX(-200px) scale(0.9) translateZ(-120px);
+            opacity: 0.8;
+        }
+
+        .project-card.left-1 img {
+            filter: grayscale(80%);
+        }
+
+        .project-card.right-1 {
+            z-index: 5;
+            transform: translateX(200px) scale(0.9) translateZ(-120px);
+            opacity: 0.8;
+        }
+
+        .project-card.right-1 img {
+            filter: grayscale(80%);
+        }
+
+        .project-card.right-2 {
+            z-index: 1;
+            transform: translateX(380px) scale(0.8) translateZ(-260px);
+            opacity: 0.5;
+        }
+
+        .project-card.right-2 img {
+            filter: grayscale(100%);
+        }
+
+        .project-card.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .project-info {
+            text-align: center;
+            margin-top: 2.5rem;
+            transition: all 0.5s ease-out;
+        }
+
+        .project-title {
+            color: #f9fafb;
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .project-title::before,
+        .project-title::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            width: 70px;
+            height: 2px;
+            background: #d4af37;
+        }
+
+        .project-title::before {
+            left: -85px;
+        }
+
+        .project-title::after {
+            right: -85px;
+        }
+
+        .project-tech {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            font-weight: 500;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 0.5rem 0;
+            margin-top: -0.5rem;
+        }
+
+        .projects-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2.5rem;
+        }
+
+        .projects-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 999px;
+            background: rgba(212, 175, 55, 0.18);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .projects-dot.active {
+            background: #d4af37;
+            transform: scale(1.25);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+        }
+
+        .projects-nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.9);
+            color: #f9fafb;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .projects-nav-arrow:hover {
+            background: rgba(0, 0, 0, 0.95);
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
+        }
+
+        .projects-nav-arrow.left {
+            left: 10px;
+        }
+
+        .projects-nav-arrow.right {
+            right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .projects-carousel-container {
+                height: 340px;
+            }
+
+            .project-card {
+                width: 210px;
+                height: 290px;
+            }
+
+            .project-card.left-2 {
+                transform: translateX(-250px) scale(0.78) translateZ(-260px);
+            }
+
+            .project-card.left-1 {
+                transform: translateX(-130px) scale(0.88) translateZ(-120px);
+            }
+
+            .project-card.right-1 {
+                transform: translateX(130px) scale(0.88) translateZ(-120px);
+            }
+
+            .project-card.right-2 {
+                transform: translateX(250px) scale(0.78) translateZ(-260px);
+            }
+
+            .project-title {
+                font-size: 1.4rem;
+            }
+
+            .project-title::before,
+            .project-title::after {
+                width: 45px;
+            }
+
+            .project-title::before {
+                left: -55px;
+            }
+
+            .project-title::after {
+                right: -55px;
+            }
+
+            .projects-nav-arrow.left {
+                left: -2px;
+            }
+            .projects-nav-arrow.right {
+                right: -2px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-gold-500 selection:text-black">
+
+    <!-- OVERLAY ANIMAZIONE AEREO -->
+    <div id="flight-animation" class="flight-overlay hidden">
+        <div id="flight-plane" class="flight-plane">
+            <i class="fas fa-plane-departure"></i>
+        </div>
+    </div>
+
+    <!-- VIEW 1: MAIN PORTFOLIO -->
+    <div id="main-portfolio">
+        <div class="ambient-light"></div>
+
+        <!-- NAVBAR -->
+        <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="#" class="text-xl font-bold tracking-tighter text-white hover:text-gold-400 transition-colors">
+                    LUDOVICO<span class="text-gold-500">.</span>
+                </a>
+                
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
+                    <a href="#about" class="hover:text-gold-400 transition-colors">About</a>
+                    <a href="#education" class="hover:text-gold-400 transition-colors">Education</a>
+                    <a href="#skills" class="hover:text-gold-400 transition-colors">School Skills</a>
+                    <a href="#experience" class="hover:text-gold-400 transition-colors">Projects</a>
+                    <a href="#contact" class="px-4 py-2 rounded-full border border-gold-500/30 text-gold-400 hover:bg-gold-500 hover:text-black transition-all">Contact</a>
+                </div>
+
+                <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-white/5 p-4 space-y-4 text-center">
+                <a href="#about" class="block text-gray-300 hover:text-gold-400">About</a>
+                <a href="#education" class="block text-gray-300 hover:text-gold-400">Education</a>
+                <a href="#skills" class="block text-gray-300 hover:text-gold-400">School Skills</a>
+                <a href="#experience" class="block text-gray-300 hover:text-gold-400">Projects</a>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative pt-20">
+            <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1 text-center md:text-left reveal active">
+                    <div class="inline-block px-3 py-1 mb-4 border border-gold-500/30 rounded-full bg-gold-500/10 text-gold-400 text-xs tracking-widest uppercase">
+                        Available for work
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight leading-tight">
+                        Ludovico <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">Pigatto</span>
+                    </h1>
+                    <h2 class="text-xl md:text-2xl text-gold-500 font-light mb-6">
+                        Computer Science Student | Junior Developer
+                    </h2>
+                    <p class="text-gray-400 text-lg mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                       Hi, I'm Ludovico  junior developer focused on technology, web development, and system engineering.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <a href="#contact" class="btn-primary px-8 py-3 rounded-full shadow-lg text-center transition-transform">
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+
+                <div class="order-1 md:order-2 flex justify-center reveal active delay-200">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80">
+                        <div class="absolute inset-0 bg-gold-500 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
+                        <div class="relative w-full h-full rounded-full border-2 border-white/10 overflow-hidden glass-panel animate-float">
+                            <img src="https://ui-avatars.com/api/?name=Ludovico+Pigatto&background=0a0a0a&color=d4af37&size=512"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/512x512/0a0a0a/d4af37?text=LP';"
+                                 alt="Ludovico Pigatto"
+                                 class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#about" class="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500 hover:text-gold-500 transition-colors animate-bounce">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="py-24 relative">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center reveal">About Me</h2>
+                <div class="glass-panel p-8 md:p-12 rounded-3xl reveal">
+                    <div class="space-y-6 text-gray-300 leading-relaxed text-lg">
+                        <p>
+                            My name is <strong class="text-white">Ludovico Pigatto</strong>, I’m from Marostica, and I’m studying Computer Science at the Enrico Fermi Technical Institute in Bassano del Grappa.
+                            I’ve always been curious about computers and about what actually happens behind the systems we use every day . Since I was young, this curiosity pushed me to look deeper into how
+                            technology works and why it behaves the way it does.
+                        </p>
+                        <p>
+                            During my studies, I’ve had the chance to work on different areas of IT: programming in <strong>C, C++, Java and Python</strong>, managing <strong>MySQL</strong> databases,
+                            and setting up networks with <strong>VLAN</strong> , <strong>DMZ</strong> and other essential services.
+                        </p>
+                        <p>
+                            I also completed two Cisco certifications (Linux Essentials and Introduction to Networks) which helped me understand the ISO/OSI model better and get a clearer idea of how
+                            operating systems manage processes and communication between networks .
+                        </p>
+                        <p>
+                            I’d describe myself as a curious person with an open mindset, always trying to understand things properly. At the same time, I’m quite precise: when I start a project, I like to
+                            check the details and make sure the solution I’m building is reliable and well organised .
+                        </p>
+                        <p>
+                            Besides IT, I’m very passionate about
+                            <span class="highlight-link" onclick="openDetailView('aviation')">
+                                <strong class="text-gold-400">flight simulation</strong>
+                            </span>
+                            and
+                            <span class="highlight-link" onclick="openDetailView('3dprinting')">
+                                <strong class="text-gold-400">3D printing</strong>
+                            </span>.
+                            Flight simulation actually pushed me to create a tool
+                            for handling flight data, something I was able to work on thanks to the technical skills I’ve built in these five years at school.
+                        </p>
+                        <p>
+                            I’m also learning CAD by myself, designing models that I print in 3D and use for electronics projects or for practical things at home. These activities help me combine software and
+                            hardware and turn what I learn into real projects.
+                        </p>
+                        <p>
+                            After finishing school, I’d like to study Computer Engineering and keep improving my software skills. My goal is to become a full-stack developer and work on projects that are
+                            well built and meaningful.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION -->
+<section id="education" class="py-24 bg-black/50">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center reveal">Education</h2>
+
+        <div class="relative border-l border-gold-500/20 ml-4 md:ml-0 space-y-12">
+
+            <!-- HIGH SCHOOL -->
+            <div class="relative pl-8 md:pl-12 reveal">
+                <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-gold-500 shadow-[0_0_10px_#d4af37]"></span>
+                <div class="glass-panel p-6 rounded-xl hover:border-gold-500/30 transition-colors">
+                    <span class="text-sm text-gold-400 font-mono mb-2 block">2020 – Expected 2025</span>
+                    <h3 class="text-xl font-bold text-white">High School Diploma in Computer Science</h3>
+                    <p class="text-gray-400 mt-1">ITIS Enrico Fermi, Bassano Del Grappa</p>
+                    <p class="mt-4 text-gray-400 text-sm"></p>
+                </div>
+            </div>
+
+            <!-- NDG LINUX ESSENTIALS -->
+            <div class="relative pl-8 md:pl-12 reveal">
+                <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-gray-600"></span>
+                <div class="glass-panel p-6 rounded-xl hover:border-gold-500/30 transition-colors">
+                    <span class="text-sm text-gold-400 font-mono mb-2 block">2024</span>
+                    <h3 class="text-xl font-bold text-white">NDG Linux Essentials</h3>
+                    <p class="text-gray-400 mt-1">Cisco Networking Academy</p>
+                    <p class="mt-4 text-gray-400 text-sm">
+                        Introduction to the Linux operating system, command line usage, filesystem structure,
+                        permissions, processes and basic system administration concepts.
+                    </p>
+                </div>
+            </div>
+
+            <!-- INTRODUCTION TO NETWORKS -->
+            <div class="relative pl-8 md:pl-12 reveal">
+                <span class="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-gray-600"></span>
+                <div class="glass-panel p-6 rounded-xl hover:border-gold-500/30 transition-colors">
+                    <span class="text-sm text-gold-400 font-mono mb-2 block">2024</span>
+                    <h3 class="text-xl font-bold text-white">Cisco Introduction to Networks</h3>
+                    <p class="text-gray-400 mt-1">Cisco Networking Academy</p>
+                    <p class="mt-4 text-gray-400 text-sm">
+                        Fundamentals of networking, the OSI model, IPv4 and IPv6 addressing, routing basics,
+                        Ethernet, switching, subnetting and essential network troubleshooting.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+        <!-- SCHOOL SKILLS (CARD CLICCABILE) -->
+        <section id="skills" class="py-24">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center reveal">School Skills</h2>
+                <div class="reveal">
+                    <button onclick="openDetailView('skills')"
+                            class="w-full text-left glass-panel rounded-3xl p-8 md:p-10 hover:border-gold-500/40 transition-all hover:-translate-y-1 cursor-pointer flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center">
+                        <div class="flex-1">
+                            <p class="text-sm uppercase tracking-[0.3em] text-gold-400 mb-3">
+                                ITIS FERMI · 5 YEARS TRACK
+                            </p>
+                            <h3 class="text-2xl md:text-3xl font-semibold text-white mb-3">
+                                Technical Skills Developed During My Studies
+                            </h3>
+                            <p class="text-gray-400 text-sm md:text-base max-w-2xl">
+                               This section provides an overview of the technical skills I developed during my Computer Science program.
+                            </p>
+
+                            <div class="mt-5 flex flex-wrap gap-3 text-xs">
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-200">
+                                    OOP (Java, C++)
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-200">
+                                    SQL &amp; Database Design
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-200">
+                                    Networking &amp; Systems
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-200">
+                                    Web (HTML, CSS, PHP)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center md:self-stretch">
+                            <div class="ml-auto flex flex-col items-center text-gold-400">
+                                <span class="text-xs uppercase tracking-[0.25em] text-gray-400 mb-2">
+                                    View Details
+                                </span>
+                                <div class="w-12 h-12 rounded-full border border-gold-500/50 flex items-center justify-center">
+                                    <i class="fas fa-arrow-right text-gold-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE & PROJECTS -->
+        <section id="experience" class="py-24">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal">Experience & Projects</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mb-10 text-sm md:text-base reveal">
+                    Here you’ll find an overview of the areas I have been working on, including an aviation performance tool, IoT development, and several 3D printing projects currently in progress .
+                </p>
+                
+                <!-- CAROSELLO PROGETTI (A350 + 3D PRINTING) -->
+                <div class="reveal">
+                    <div class="projects-carousel-container">
+                        <button class="projects-nav-arrow left">‹</button>
+
+                        <div class="projects-carousel-track" id="projectsCarousel">
+                            <!-- Card 0: A350 Performance -->
+                            <div class="project-card center" data-index="0">
+                                <!-- MINI CAROSELLO IMMAGINI A350 (puoi cambiare i nomi dei file) -->
+                                <img src="a350-main-1.jpg"
+                                     alt="A350 Performance Calculator image 1"
+                                     class="project-image-slide">
+                                <img src="a350-main-2.jpg"
+                                     alt="A350 Performance Calculator image 2"
+                                     class="project-image-slide hidden">
+                            </div>
+                            <!-- Card 1: 3D Printing Lab -->
+                            <div class="project-card right-1" data-index="1">
+                                <!-- MINI CAROSELLO IMMAGINI 3D PRINTING -->
+                                <img src="3d-main-1.jpg"
+                                     alt="3D Printing Lab image 1"
+                                     class="project-image-slide">
+                                <img src="3d-main-2.jpg"
+                                     alt="3D Printing Lab image 2"
+                                     class="project-image-slide hidden">
+                            </div>
+                        </div>
+
+                        <button class="projects-nav-arrow right">›</button>
+                    </div>
+
+                    <div class="project-info">
+                        <h3 class="project-title">A350 Performance Calculator</h3>
+                        <p class="project-tech">Python · Aviazione · Simulazione</p>
+                    </div>
+
+                    <div class="projects-dots" id="projectsDots">
+                        <div class="projects-dot active" data-index="0"></div>
+                        <div class="projects-dot" data-index="1"></div>
+                    </div>
+                </div>
+
+                <!-- GITHUB CTA -->
+                <div class="mt-10 reveal">
+                    <p class="text-gray-400 mb-4">Want to see my upcoming projects?</p>
+                    <a href="https://github.com" target="_blank" class="btn-liquid inline-flex items-center gap-2 px-6 py-3 rounded-full group">
+                        <span>Visit my GitHub</span>
+                        <i class="fab fa-github text-lg group-hover:rotate-12 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+       <section id="contact" class="py-24 relative">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="glass-panel p-8 md:p-12 rounded-3xl reveal relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6">Let's Connect</h2>
+                    <p class="text-gray-400 mb-8">
+                        Available for project opportunities and collaborations. Contact me for further information.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gold-500">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Email</p>
+                                <a href="mailto:ludovicopigatt@gmail.com" class="text-white hover:text-gold-400 transition-colors">
+                                    ludovicopigatt@gmail.com
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUI continua il tuo form (non l’ho toccato) -->
+
+
+                        <form
+    action="https://formspree.io/f/manrnovr"
+    method="POST"
+    class="space-y-6"
+>
+    <div>
+        <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2">Name</label>
+        <input
+            type="text"
+            name="name"
+            required
+            class="w-full bg-transparent border-b border-gray-700 focus:border-gold-500 text-white px-0 py-2 outline-none transition-colors"
+            placeholder=""
+        >
+    </div>
+
+    <div>
+        <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2">Email</label>
+        <input
+            type="email"
+            name="email"
+            required
+            class="w-full bg-transparent border-b border-gray-700 focus:border-gold-500 text-white px-0 py-2 outline-none transition-colors"
+            placeholder=""
+        >
+    </div>
+
+    <div>
+        <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2">Message</label>
+        <textarea
+            rows="3"
+            name="message"
+            required
+            class="w-full bg-transparent border-b border-gray-700 focus:border-gold-500 text-white px-0 py-2 outline-none transition-colors"
+            placeholder=""
+        ></textarea>
+    </div>
+
+    <input type="hidden" name="_subject" value="New message from your portfolio">
+
+    <button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold mt-4">
+        Send Message
+    </button>
+</form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER RIMOSSO SU TUA RICHIESTA -->
+    </div>
+
+    <!-- VIEW 2: SCHOOL SKILLS DETAIL -->
+    <div id="detail-skills" class="detail-view p-6 md:p-10">
+        <div class="max-w-5xl mx-auto relative">
+            <button onclick="closeDetailView('skills')"
+                    class="text-gold-400 hover:text-white transition-colors text-sm md:text-base mb-8 flex items-center gap-2">
+                <i class="fas fa-chevron-left"></i>
+                <span>Go Back</span>
+            </button>
+
+            <header class="pt-2 md:pt-0 mb-10 md:mb-12 relative z-10">
+                <p class="text-xs md:text-sm tracking-[0.25em] uppercase text-gray-400 mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-500 shadow-[0_0_12px_rgba(212,175,55,0.9)]"></span>
+                    ITIS Fermi · Skill map
+                </p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">
+                    Technical Competencies
+                </h1>
+                <p class="text-base md:text-lg text-gray-300 max-w-2xl">
+                    During my five year computer science program,I developed a solid foundation in multiple areas including:programming, databases, networking, operating systems and logical problem solving. Below is how these subjects translate into practical technical competencies.
+                </p>
+            </header>
+
+            <div class="space-y-10 md:space-y-12 pb-16 relative z-10">
+
+                <!-- SEZIONE INTRO + TAG -->
+                <section class="detail-section-card">
+                    <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-4">
+                        <i class="fas fa-graduation-cap text-gold-500 text-xl md:text-2xl"></i>
+                        Skills acquired during my academic path
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed text-base md:text-lg mb-4">
+                        This experience taught me more than programming.
+                        It helped me develop a practical mindset: problem-solving , clear reasoning, and the ability to work  with others.
+                        Below are the technical skills I built during this path .
+                    
+                    </p>
+
+                    <div class="mt-6 flex flex-wrap gap-2 text-xs">
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            Problem-Solving 
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            OOP · Java · C++
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            MYSQL(JOIN, GROUP BY, HAVING)
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            Networking · VLAN · Routing
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            Linux · Virtual Machine
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                            Git &amp; Repository Workflow
+                        </span>
+                    </div>
+                </section>
+
+                <!-- GRID SKILL CARDS -->
+                <section class="detail-section-card">
+                    <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-6">
+                        <i class="fas fa-layer-group text-gold-500 text-xl md:text-2xl"></i>
+                         Areas of Competence
+                    </h2>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- PROGRAMMAZIONE OOP -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">OOP · Programming Fundamentals</h3>
+                                    <p class="text-[0.75rem] text-gray-400">Java · C++ ·  OOP</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                                <li>Use of <strong>class</strong>, <strong>objects</strong>,inheritance and polymorphism.</li>
+                                <li>Implementation of methods, constructors, and method overloading/overriding.</li>
+                                <li>Small structured projects .</li>
+                                
+                            </ul>
+                        </div>
+
+                        <!-- BACKEND & SCRIPTING -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">Backend &amp; Scripting</h3>
+                                    <p class="text-[0.75rem] text-gray-400">PHP · Python base</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                                <li>Handling server-side <strong>forms</strong> and HTTP requests.</li>
+                                <li>Reading and validating user input.</li>
+                                <li>Building small dynamic pages connected to a database.</li>
+                                <li>Writing basic Python scripts for simple automation and API usage.</li>
+                            </ul>
+                        </div>
+
+                        <!-- DATABASE & SQL -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">Database &amp; SQL</h3>
+                                    <p class="text-[0.75rem] text-gray-400">MySQL ·  ER Modelling</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                                <li>Database design with <strong>ER diagrams</strong>.</li>
+                                <li>Primary keys, foreign keys, constraints, indexes.</li>
+                                <li>SQL queries with joins and grouping.</li>
+                                <li>Aggregation functions.</li>
+                                <li><strong>Normalization</strong> (1NF–3NF).</li>
+                            </ul>
+                        </div>
+
+                        <!-- RETI & SISTEMI -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-network-wired"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">Networking &amp; systems</h3>
+                                    <p class="text-[0.75rem] text-gray-400">VLAN · Routing · Firewall</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                              <li>OSI model and TCP/IP basics.</li>
+                              <li>IP addressing and subnetting.</li>
+                              <li>VLANs, trunks, and network segmentation.</li>
+                              <li>Packet Tracer and basic router/switch setup.</li>
+                              <li>DMZ, NAT, and basic firewall concepts.</li>
+                            </ul>
+                        </div>
+
+                        <!-- SISTEMI OPERATIVI & TOOLS -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">Networking &amp; Tools</h3>
+                                    <p class="text-[0.75rem] text-gray-400">Linux · Windows · Git</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                                <li>Linux shell: navigation, permissions, basic services.</li>
+                                <li>Virtualization with VirtualBox for lab environments.</li>
+                                <li>Git workflow: commit, branch, merge, push/pull.</li>
+                            </ul>
+                        </div>
+
+                        <!-- EXTRA: ELETTRONICA & 3D -->
+                        <div class="bg-black/60 rounded-2xl border border-white/10 p-5 flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-400">
+                                    <i class="fas fa-cubes"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-white">Extra: Eletronics &amp; 3D</h3>
+                                    <p class="text-[0.75rem] text-gray-400">Arduino · CAD · Slicing</p>
+                                </div>
+                            </div>
+                            <ul class="text-xs text-gray-300 space-y-1">
+                               <li>Arduino basics (LEDs, sensors, actuators).</li>
+                               <li>Sensor reading and logic in C/C++.</li>
+                               <li>3D modelling of functional parts.</li>
+                               <li>Slicing software: profiles, infill, supports, calibration.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: AVIAZIONE -->
+    <div id="detail-aviation" class="detail-view p-6 md:p-10">
+        <div class="max-w-5xl mx-auto relative">
+
+            <button onclick="closeDetailView('aviation')"
+                    class="text-gold-400 hover:text-white transition-colors text-sm md:text-base mb-8 flex items-center gap-2">
+                <i class="fas fa-chevron-left"></i>
+                <span>Go Back</span>
+            </button>
+
+            <header class="pt-2 md:pt-0 mb-10 md:mb-12 relative z-10">
+                <p class="text-xs md:text-sm tracking-[0.25em] uppercase text-gray-400 mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(45,212,191,0.9)]"></span>
+                    Flight Simulation · Personal Passion
+                </p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">
+                   A350 Performance Tool
+                </h1>
+                <p class="text-base md:text-lg text-gray-300 max-w-2xl">
+                    A project combining my interest in aviation with programming, turning real performance concepts into a working tool.
+                </p>
+            </header>
+
+            <div class="space-y-10 md:space-y-12 pb-16 relative z-10">
+
+                <!-- SEZIONE 1: Come è nata la passione + carosello immagini -->
+                <section class="detail-section-card">
+                    <div class="grid md:grid-cols-3 gap-8 items-center">
+                        <div class="md:col-span-2 space-y-4 text-gray-300 leading-relaxed text-base md:text-lg">
+                            <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-2">
+                                <i class="fas fa-plane-departure text-gold-500 text-xl md:text-2xl"></i>
+                                   How it all started
+                            </h2>
+                            <p>
+                                My interest in aviation started at a young age, fascinated by how complex aircraft systems work. 
+                                Flight simulators turned that curiosity into something real: I could study avionics, follow procedures, 
+                                and understand performance logic through practice.
+                            </p>
+                            <p>
+                                With the experience gained over the years , I decided to create my own performance tool , using what I learned 
+                                to fill a gap the simulator didn’t cover.
+                            </p>
+                        </div>
+
+                        <!-- MINI CAROSELLO A350 -->
+                        <div class="md:col-span-1 flex justify-center">
+                            <div class="w-full max-w-xs space-y-3">
+                                <div class="relative rounded-xl overflow-hidden glass-panel border border-gold-500/40">
+                                    <img
+                                        src="a350-cockpit-1.jpg"
+                                        alt="Cockpit Airbus A350-900, pannelli e display"
+                                        class="w-full h-40 object-cover aviation-slide active">
+                                    <img
+                                        src="a350-cockpit-2.jpg"
+                                        alt="Cockpit Airbus A350-900 al gate, vista 335"
+                                        class="w-full h-40 object-cover aviation-slide hidden">
+                                    <img
+                                        src="a350-exterior-1.jpg"
+                                        alt="Airbus A350-900 in sosta al finger"
+                                        class="w-full h-40 object-cover aviation-slide hidden">
+                                    <!-- NUOVA IMMAGINE CHE AGGIUNGERAI TU -->
+                                    <img
+                                        src="A350-exterior-2.jpg"
+                                        alt="Airbus A350-900 vista esterna aggiuntiva"
+                                        class="w-full h-40 object-cover aviation-slide hidden">
+
+                                    <button id="aviationPrev"
+                                            class="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 text-gray-200 flex items-center justify-center text-xs hover:bg-black/80">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button id="aviationNext"
+                                            class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 text-gray-200 flex items-center justify-center text-xs hover:bg-black/80">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+
+                                    <div class="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gold-500 opacity-80 aviation-dot"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-500 opacity-60 aviation-dot"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-500 opacity-60 aviation-dot"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-500 opacity-60 aviation-dot"></span>
+                                    </div>
+                                </div>
+                                <p class="text-[0.7rem] text-gray-400 text-center">
+                                    The A350-900 used as the reference for the performance tool.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SEZIONE 2: Avionica & sviluppo -->
+                <section class="detail-section-card">
+    <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-4">
+        <i class="fas fa-code text-gold-500 text-xl md:text-2xl"></i>
+        Why this project connects aviation and computer science
+    </h2>
+
+    <p class="text-gray-300 leading-relaxed text-base md:text-lg mb-4">
+      Aircraft are full of complex systems: sensors, redundant computers, control logic, and performance rules. Understanding this world became much easier thanks to the technical skills I developed at school, including programming, problem-solving, data structures, and the mindset needed to work with structured information .
+    </p>
+
+    <p class="text-gray-300 leading-relaxed text-base md:text-lg">
+        This project combines those skills. I translated aviation concepts into code, creating a  tool that applies logic, calculations, and procedures.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-5 text-xs md:text-sm text-gray-300">
+        <div class="bg-black/60 rounded-xl border border-white/10 p-4 space-y-2">
+            <div class="font-mono text-emerald-300 tracking-[0.2em] text-[0.7rem] uppercase">
+                What aviation taught me
+            </div>
+            <ul class="list-disc list-inside space-y-1 text-gray-400">
+                <li>Being precise and methodical.</li>
+                <li>Clear rules and reliable outputs.</li>
+                <li>Ensuring clean and reliable data flows.</li>
+            </ul>
+        </div>
+
+        <div class="bg-black/60 rounded-xl border border-white/10 p-4 space-y-2">
+            <div class="font-mono text-emerald-300 tracking-[0.2em] text-[0.7rem] uppercase">
+                What school provided
+            </div>
+            <ul class="list-disc list-inside space-y-1 text-gray-400">
+                <li>Programming foundations (Python, logic, data).</li>
+                <li>Problem-solving.</li>
+                <li>Ability to work in a team.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+                <!-- SEZIONE 3: A350 Performance Calculator -->
+                <section class="detail-section-card">
+                    <div class="mb-6 flex flex-wrap justify-between gap-4 items-end">
+                        <div>
+                            <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-2">
+                                <i class="fas fa-calculator text-gold-500 text-xl md:text-2xl"></i>
+                                A350 Performance Calculator
+                            </h2>
+                            <p class="text-gray-300 text-sm md:text-base">
+                             A tool that automatically calculates takeoff performance using real operational data.
+                            </p>
+                        </div>
+                        <div class="text-xs text-right text-gray-400">
+                  
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 items-start">
+                        <div class="space-y-4 text-gray-300 leading-relaxed text-sm md:text-base">
+                            <p>
+                               The goal is to replicate the A350 takeoff performance logic to add realism to the simulation:V-speeds (V1, VR, V2), required thrust and runway margins, considering weight, temperature, pressure and runway conditions
+                            </p>
+                           
+                            <a href="#" class="inline-flex items-center gap-2 px-4 py-2 mt-3 rounded-full btn-liquid text-xs md:text-sm border-gold-500 text-gold-400 hover:bg-gold-500/10">
+                                <span>View my code(coming soon)</span>
+                                <i class="fab fa-github text-base"></i>
+                            </a>
+                        </div>
+
+                        <!-- CARD NERA, TESTO CHIARO -->
+                        <div class="w-full rounded-xl border border-gold-500/40 bg-black/90 p-4 md:p-5 font-mono text-[0.7rem] text-gray-100 shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+                            <div class="flex justify-between items-center border-b border-gold-500/40 pb-2 mb-3 text-gold-400">
+                                <span>TAKEOFF PERF · RWY 25R</span>
+                                <span class="text-[0.6rem] text-gray-300">A350 · SIM</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-gray-100">
+                                <div>
+                                    <div class="text-[0.65rem] text-gray-400">TOW</div>
+                                    <div>234.0 t</div>
+                                </div>
+                                <div>
+                                    <div class="text-[0.65rem] text-gray-400">TEMP</div>
+                                    <div>30 °C</div>
+                                </div>
+                                <div>
+                                    <div class="text-[0.65rem] text-gray-400">V1 / VR / V2</div>
+                                    <div>151 / 158 / 163 kt</div>
+                                </div>
+                                <div>
+                                    <div class="text-[0.65rem] text-gray-400">THRUST</div>
+                                    <div>FLEX 60°</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 border-t border-gold-500/30 pt-2 text-[0.6rem] text-gray-400">
+                                CALC MODE: INTERPOLATED · LIMIT CHECK: OK · MARGIN: 520 m · CONFIG: FLAP 2
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 4: 3D PRINTING LAB (RIVISTA) -->
+    <div id="detail-3dprinting" class="detail-view p-6 md:p-10">
+        <div class="max-w-5xl mx-auto relative">
+
+            <button onclick="closeDetailView('3dprinting')"
+                    class="text-gold-400 hover:text-white transition-colors text-sm md:text-base mb-8 flex items-center gap-2">
+                <i class="fas fa-chevron-left"></i>
+                <span>Go Back</span>
+            </button>
+
+            <header class="pt-2 md:pt-0 mb-10 md:mb-12 relative z-10">
+                <p class="text-xs md:text-sm tracking-[0.25em] uppercase text-gray-400 mb-3 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-gold-500 shadow-[0_0_12px_rgba(212,175,55,0.9)]"></span>
+                    3D Printing · Personal Lab
+                </p>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">
+                    3D Printing Lab
+                </h1>
+                <p class="text-base md:text-lg text-gray-300 max-w-2xl">
+                    
+                </p>
+            </header>
+
+            <div class="space-y-10 md:space-y-12 pb-16 relative z-10">
+
+                <!-- SEZIONE 1: PICCOLA INTRO + IMMAGINE -->
+                <section class="detail-section-card">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="space-y-4 text-gray-300 leading-relaxed text-base md:text-lg">
+                            <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-2">
+                                <i class="fas fa-cubes text-gold-500 text-xl md:text-2xl"></i>
+                                   Turning ideas into functional parts
+                            </h2>
+                            <p>
+                                <p>
+                                  <p>
+                                    3D printing is one of the tools I use most in my projects. 
+                                    I design and print custom parts when I need something precise for electronics or small builds.
+                                  </p>
+
+                               </p>
+
+                              
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 text-xs mt-4">
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                                    PLA · PETG · basic tuning
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                                    Functional design
+                                </span>
+                                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-100">
+                                    Practical use cases
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- BLOCCO IMMAGINE 3D (MODIFICABILE) -->
+                        <div class="flex justify-center">
+                            <div class="w-full max-w-sm rounded-2xl overflow-hidden glass-panel border border-gold-500/40">
+                                <!-- QUI METTERAI TU LA TUA IMMAGINE 3D PRINCIPALE -->
+                                <img
+                                    src="3d-print-main.jpg"
+                                    alt="Example 3D print from the lab"
+                                    class="w-full h-64 object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                 <!-- SEZIONE 2: ELEGANTE, SENZA LISTE E SENZA QUADRATI -->
+<section class="detail-section-card">
+    <h2 class="text-2xl md:text-3xl font-semibold text-gold-400 flex items-center gap-3 mb-4">
+        <i class="fas fa-helicopter text-gold-500 text-xl md:text-2xl"></i>
+        What I'm Building
+    </h2>
+
+    <div class="flex flex-col md:flex-row md:items-start gap-8 mt-4">
+
+        <div class="flex-1 space-y-4 text-gray-300 text-sm md:text-base">
+            <p>
+              <p>
+               With the programming and electronics basics I learned at school, 
+               I’ve started working on small drone builds. 
+               3D printing helps me create the parts I need and turn what I studied into something I can assemble and test.
+              </p>
+
+            </p>
+        </div>
+
+        <!-- IMMAGINE SENZA BORDO (NO STRISCIA) -->
+        <div class="w-full md:w-40 rounded-xl overflow-hidden bg-black/40">
+            <img 
+                src="drone-preview.jpg" 
+                alt="3D printed drone parts"
+                class="w-full h-32 object-cover opacity-90"
+                onerror="this.style.display='none'">
+        </div>
+
+    </div>
+</section>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        window.addEventListener("scroll", function() {
+            const nav = document.getElementById("navbar");
+            if (window.scrollY > 50) {
+                nav.classList.add("shadow-lg");
+            } else {
+                nav.classList.remove("shadow-lg");
+            }
+        });
+
+        // ANIMAZIONE AEREO + OPEN VIEW
+        function openDetailView(viewId) {
+            const overlay = document.getElementById('flight-animation');
+            const plane = document.getElementById('flight-plane');
+
+            overlay.classList.remove('hidden');
+
+            plane.classList.remove('animate');
+            void plane.offsetWidth;
+            plane.classList.add('animate');
+
+            setTimeout(() => {
+                document.getElementById('main-portfolio').classList.add('hidden');
+                const detailView = document.getElementById(`detail-${viewId}`);
+                if (detailView) {
+                    detailView.classList.add('active');
+                    detailView.scrollTop = 0;
+                }
+            }, 450);
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 900);
+        }
+
+        function closeDetailView(viewId) {
+            const detailView = document.getElementById(`detail-${viewId}`);
+            if (detailView) {
+                detailView.classList.remove('active');
+            }
+            setTimeout(() => {
+                document.getElementById('main-portfolio').classList.remove('hidden');
+                let targetId = 'experience';
+                if (viewId === 'skills') targetId = 'skills';
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 500);
+        }
+
+        // MINI CAROSELLO AVIAZIONE
+        const aviationSlides = document.querySelectorAll('.aviation-slide');
+        const aviationDots = document.querySelectorAll('.aviation-dot');
+        const aviationPrev = document.getElementById('aviationPrev');
+        const aviationNext = document.getElementById('aviationNext');
+        let aviationIndex = 0;
+
+        function showAviationSlide(index) {
+            aviationSlides.forEach((img, i) => {
+                if (i === index) {
+                    img.classList.remove('hidden');
+                    img.classList.add('active');
+                } else {
+                    img.classList.add('hidden');
+                    img.classList.remove('active');
+                }
+            });
+            aviationDots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-gray-500', 'opacity-60');
+                    dot.classList.add('bg-gold-500', 'opacity-80');
+                } else {
+                    dot.classList.add('bg-gray-500', 'opacity-60');
+                    dot.classList.remove('bg-gold-500', 'opacity-80');
+                }
+            });
+        }
+
+        function changeAviationSlide(delta) {
+            aviationIndex = (aviationIndex + delta + aviationSlides.length) % aviationSlides.length;
+            showAviationSlide(aviationIndex);
+        }
+
+        if (aviationPrev && aviationNext) {
+            aviationPrev.addEventListener('click', () => changeAviationSlide(-1));
+            aviationNext.addEventListener('click', () => changeAviationSlide(1));
+        }
+
+        if (aviationSlides.length > 0) {
+            showAviationSlide(aviationIndex);
+        }
+
+        // === CAROSELLO PROGETTI (2 PROGETTI) ===
+        const projects = [
+            { name: "A350 Performance Calculator", tech: "Python · Aviation · Flight Simulation" },
+            { name: "3D Printing Lab", tech: "CAD · Slicing · Prototyping" }
+        ];
+
+        const projectCards = document.querySelectorAll('#projectsCarousel .project-card');
+        const projectDots = document.querySelectorAll('#projectsDots .projects-dot');
+        const projectTitle = document.querySelector('.project-title');
+        const projectTech = document.querySelector('.project-tech');
+        const projLeftArrow = document.querySelector('.projects-nav-arrow.left');
+        const projRightArrow = document.querySelector('.projects-nav-arrow.right');
+
+        let projectCurrentIndex = 0;
+        let projectIsAnimating = false;
+
+        function updateProjectsCarousel(newIndex) {
+            if (projectIsAnimating || projectCards.length === 0) return;
+            projectIsAnimating = true;
+
+            projectCurrentIndex = (newIndex + projectCards.length) % projectCards.length;
+
+            projectCards.forEach((card, i) => {
+                const offset = (i - projectCurrentIndex + projectCards.length) % projectCards.length;
+
+                card.classList.remove(
+                    'center',
+                    'left-1',
+                    'left-2',
+                    'right-1',
+                    'right-2',
+                    'hidden'
+                );
+
+                if (offset === 0) {
+                    card.classList.add('center');
+                } else if (offset === 1) {
+                    card.classList.add('right-1');
+                } else if (offset === projectCards.length - 1) {
+                    card.classList.add('left-1');
+                } else if (offset === 2) {
+                    card.classList.add('right-2');
+                } else if (offset === projectCards.length - 2) {
+                    card.classList.add('left-2');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            projectDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === projectCurrentIndex);
+            });
+
+            if (projectTitle && projectTech && projects[projectCurrentIndex]) {
+                projectTitle.style.opacity = '0';
+                projectTech.style.opacity = '0';
+
+                setTimeout(() => {
+                    projectTitle.textContent = projects[projectCurrentIndex].name;
+                    projectTech.textContent = projects[projectCurrentIndex].tech;
+                    projectTitle.style.opacity = '1';
+                    projectTech.style.opacity = '1';
+                }, 250);
+            }
+
+            setTimeout(() => {
+                projectIsAnimating = false;
+            }, 800);
+        }
+
+        if (projLeftArrow && projRightArrow) {
+            projLeftArrow.addEventListener('click', () => {
+                updateProjectsCarousel(projectCurrentIndex - 1);
+            });
+            projRightArrow.addEventListener('click', () => {
+                updateProjectsCarousel(projectCurrentIndex + 1);
+            });
+        }
+
+        projectDots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                updateProjectsCarousel(i);
+            });
+        });
+
+        // Click sulle card: se è quella centrale → apri dettaglio, altrimenti ruota
+        projectCards.forEach((card, i) => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('center')) {
+                    if (i === 0) {
+                        openDetailView('aviation');
+                    } else if (i === 1) {
+                        openDetailView('3dprinting');
+                    }
+                } else {
+                    updateProjectsCarousel(i);
+                }
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                updateProjectsCarousel(projectCurrentIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                updateProjectsCarousel(projectCurrentIndex + 1);
+            }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleProjectSwipe();
+        });
+
+        function handleProjectSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    updateProjectsCarousel(projectCurrentIndex + 1);
+                } else {
+                    updateProjectsCarousel(projectCurrentIndex - 1);
+                }
+            }
+        }
+
+        // MINI CAROSELLO IMMAGINI SU OGNI PROJECT-CARD (HOME)
+        const projectImageGroups = Array.from(projectCards).map(card =>
+            card.querySelectorAll('.project-image-slide')
+        );
+        const projectImageIndexes = projectImageGroups.map(() => 0);
+
+        function rotateProjectImages() {
+            projectImageGroups.forEach((group, cardIdx) => {
+                if (!group || group.length <= 1) return;
+                projectImageIndexes[cardIdx] = (projectImageIndexes[cardIdx] + 1) % group.length;
+                group.forEach((img, i) => {
+                    if (i === projectImageIndexes[cardIdx]) {
+                        img.classList.remove('hidden');
+                    } else {
+                        img.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        if (projectImageGroups.length > 0) {
+            setInterval(rotateProjectImages, 4000);
+        }
+
+        // inizializza carosello progetti
+        updateProjectsCarousel(0);
+    </script>
+</body>
+</html>
